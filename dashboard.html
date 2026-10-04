@@ -529,20 +529,6 @@
         SAP SmartStock AI | AI-Powered Inventory Management
 
     </div>
-<script>
-    const productSelect = document.getElementById("productSelect");
-    const stockDisplay = document.getElementById("stockDisplay");
-
-    productSelect.addEventListener("change", function () {
-        const selectedOption =
-            productSelect.options[productSelect.selectedIndex];
-
-        stockDisplay.textContent =
-            "Current stock: " + selectedOption.dataset.stock + " units";
-    });
-
-    productSelect.dispatchEvent(new Event("change"));
-</script>
 
 </body>
 
