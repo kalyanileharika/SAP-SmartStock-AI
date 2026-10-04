@@ -71,6 +71,40 @@ def predict():
     )
 
     product_data = cursor.fetchone()
+
+    cursor.close()
+
+    if product_data is None:
+        return "Product not found in database"
+
+    stock = product_data["current_stock"]
+
+    # Get statistics for dashboard
+    stats_cursor = db.cursor(dictionary=True)
+
+    stats_cursor.execute("""
+        SELECT
+            COUNT(DISTINCT product_id) AS total_products,
+            SUM(current_stock) AS total_stock,
+            SUM(units_sold) AS total_sold
+        FROM inventory
+    """)
+
+    stats = stats_cursor.fetchone()
+
+    stats_cursor.execute("""
+        SELECT product_id, product_name,
+               MAX(current_stock) AS current_stock,
+               SUM(units_sold) AS units_sold
+        FROM inventory
+        GROUP BY product_id, product_name
+        ORDER BY product_id
+    """)
+
+    inventory_data = stats_cursor.fetchall()
+    stats_cursor.close()
+
+    # Get product history
     history_cursor = db.cursor(dictionary=True)
 
     history_cursor.execute(
@@ -80,13 +114,8 @@ def predict():
 
     history_data = history_cursor.fetchall()
     history_cursor.close()
-    cursor.close()
 
-    if product_data is None:
-        return "Product not found in database"
-
-    stock = product_data["current_stock"]
-
+    # AI prediction
     today = pd.Timestamp.today()
 
     day = today.day
@@ -97,6 +126,7 @@ def predict():
 
     predicted_demand = X @ coefficients
     predicted_demand = max(0, predicted_demand[0])
+
     replenishment = max(0, predicted_demand - stock)
 
     if stock < predicted_demand:
@@ -111,6 +141,10 @@ def predict():
 
     return render_template(
         "dashboard.html",
+        total_products=stats["total_products"],
+        total_stock=stats["total_stock"],
+        total_sold=stats["total_sold"],
+        inventory_data=inventory_data,
         product=product,
         product_name=product_data["product_name"],
         stock=int(stock),
@@ -121,7 +155,6 @@ def predict():
         history_dates=[str(row["date"]) for row in history_data],
         history_sales=[row["units_sold"] for row in history_data]
     )
-
 
 if __name__ == "__main__":
     app.run(debug=True)
