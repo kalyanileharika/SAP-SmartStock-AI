@@ -289,37 +289,37 @@
 
                     <label>Product</label>
 
-                    <select name="product">
+                    <select name="product" id="productSelect">
 
-                        <option value="P001">
+                        <option value="P001" data-stock="146">
                             P001 - Laptop
                         </option>
 
-                        <option value="P002">
+                        <option value="P002" data-stock="146">
                             P002 - Keyboard
                         </option>
 
-                        <option value="P003">
+                        <option value="P003" data-stock="143">
                             P003 - Mouse
                         </option>
 
-                        <option value="P004">
+                        <option value="P004" data-stock="146">
                             P004 - Monitor
                         </option>
 
-                        <option value="P005">
+                        <option value="P005" data-stock="142">
                             P005 - Printer
                         </option>
 
-                        <option value="P006">
+                        <option value="P006" data-stock="147">
                             P006 - Headphones
                         </option>
 
-                        <option value="P007">
+                        <option value="P007" data-stock="149">
                             P007 - Webcam
                         </option>
 
-                        <option value="P008">
+                        <option value="P008" data-stock="145">
                             P008 - Tablet
                         </option>
 
@@ -328,7 +328,7 @@
 
                     <label>Current Stock</label>
 
-<div style="
+<div id="stockDisplay" style="
     background:#f5f7fa;
     padding:12px;
     margin-bottom:18px;
@@ -529,6 +529,18 @@
         SAP SmartStock AI | AI-Powered Inventory Management
 
     </div>
+<script>
+    const productSelect = document.getElementById("productSelect");
+    const stockDisplay = document.getElementById("stockDisplay");
+
+    productSelect.addEventListener("change", function () {
+        const selectedOption =
+            productSelect.options[productSelect.selectedIndex];
+
+        stockDisplay.textContent =
+            "Current stock: " + selectedOption.dataset.stock + " units";
+    });
+</script>
 
 </body>
 
