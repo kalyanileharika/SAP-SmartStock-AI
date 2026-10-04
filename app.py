@@ -2,13 +2,16 @@ from flask import Flask, render_template, request
 import numpy as np
 import pandas as pd
 import mysql.connector
+import os
 
 app = Flask(__name__)
 db = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="YOUR_MYSQL_PASSWORD",
-    database="smartstock"
+    host=os.getenv("MYSQL_HOST"),
+    user=os.getenv("MYSQL_USER"),
+    password=os.getenv("MYSQL_PASSWORD"),
+    database=os.getenv("MYSQL_DATABASE"),
+    port=int(os.getenv("MYSQL_PORT", "3306")),
+    ssl_disabled=False
 )
 
 # Load trained AI model
@@ -22,7 +25,7 @@ def home():
 
     cursor.execute("""
         SELECT
-            COUNT(DISTINCT product_id) AS total_products
+            COUNT(DISTINCT product_id) AS total_products,
             SUM(current_stock) AS total_stock,
             SUM(units_sold) AS total_sold
         FROM inventory
