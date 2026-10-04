@@ -47,16 +47,16 @@ ORDER BY product_id
     inventory_data = cursor.fetchall()
     cursor.close()
 
-    return render_template(
-        "dashboard.html",
-        total_products=stats["total_products"],
-        total_stock=stats["total_stock"],
-        total_sold=stats["total_sold"],
-        inventory_data=inventory_data,
-        history_dates=[],
-        history_sales=[]
-    )
-
+   return render_template(
+    "dashboard.html",
+    total_products=stats["total_products"],
+    total_stock=stats["total_stock"],
+    total_sold=stats["total_sold"],
+    inventory_data=inventory_data,
+    stock=146,
+    history_dates=[],
+    history_sales=[]
+)
 @app.route("/predict", methods=["POST"])
 def predict():
 
