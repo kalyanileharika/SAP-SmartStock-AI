@@ -33,30 +33,31 @@ def home():
 
     stats = cursor.fetchone()
     cursor.close()
+
     cursor = db.cursor(dictionary=True)
 
     cursor.execute("""
         SELECT product_id, product_name,
-       MAX(current_stock) AS current_stock,
-       SUM(units_sold) AS units_sold
-FROM inventory
-GROUP BY product_id, product_name
-ORDER BY product_id
+               MAX(current_stock) AS current_stock,
+               SUM(units_sold) AS units_sold
+        FROM inventory
+        GROUP BY product_id, product_name
+        ORDER BY product_id
     """)
 
     inventory_data = cursor.fetchall()
     cursor.close()
 
-   return render_template(
-    "dashboard.html",
-    total_products=stats["total_products"],
-    total_stock=stats["total_stock"],
-    total_sold=stats["total_sold"],
-    inventory_data=inventory_data,
-    stock=146,
-    history_dates=[],
-    history_sales=[]
-)
+    return render_template(
+        "dashboard.html",
+        total_products=stats["total_products"],
+        total_stock=stats["total_stock"],
+        total_sold=stats["total_sold"],
+        inventory_data=inventory_data,
+        stock=146,
+        history_dates=[],
+        history_sales=[]
+    )
 @app.route("/predict", methods=["POST"])
 def predict():
 
