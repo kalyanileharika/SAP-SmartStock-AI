@@ -29,7 +29,7 @@ predictions = X @ coefficients
 mae = np.mean(np.abs(y - predictions))
 
 print("================================")
-print("SAP SmartStock AI")
+print("SmartStock AI")
 print("================================")
 print("Dataset loaded successfully!")
 print("AI model trained successfully!")
