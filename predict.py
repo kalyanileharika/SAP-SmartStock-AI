@@ -9,7 +9,7 @@ data["Date"] = pd.to_datetime(data["Date"])
 coefficients = np.load("model_coefficients.npy")
 
 print("================================")
-print("SAP SMARTSTOCK AI")
+print("SMARTSTOCK AI")
 print("Demand Prediction System")
 print("================================")
 
